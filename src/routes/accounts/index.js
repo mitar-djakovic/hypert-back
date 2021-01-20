@@ -1,11 +1,10 @@
 const express = require('express');
-
-const router = express.Router();
 const uuid = require('uuid');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const config = require('config');
 
+const router = express.Router();
 const secret = config.get('secret');
 
 const Account = require('../../models/accounts');
@@ -18,11 +17,11 @@ router.post('/signup', (req, res) => {
   const hashedPassword = bcrypt.hashSync(password, 10);
 
   const accountData = {
+    accountId: uuid.v4(),
     email,
     firstName,
     lastName,
     password: hashedPassword,
-    id: uuid.v4(),
   };
 
   Account.findOne({ email }).then((acc) => {

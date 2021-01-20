@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const accounts = require('./routes/accounts');
-
+const projects = require('./routes/projects');
 const connectDB = require('../config/db');
 
 const app = express();
@@ -19,6 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use('/api/accounts', accounts);
+app.use('/api/projects', projects);
 
 app.get('/', (req, res) => res.send('Hello world!'));
 
