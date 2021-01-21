@@ -24,14 +24,14 @@ router.post('/project', (req, res) => {
   });
 });
 
-router.get('/project', (req, res) => {
+router.post('/projects', (req, res) => {
   const { adminId } = req.body;
 
   Project.find({ adminId }).then((projects) => {
     if (projects) {
-      return res.status(201).send({ message: 'Projects found.', projects });
+      return res.status(201).json({ message: 'Projects found.', projects });
     }
-    return res.status(404).send({ error: true, message: 'No projects are found.' });
+    return res.status(404).json({ error: true, message: 'No projects are found.' });
   });
 });
 
@@ -41,7 +41,7 @@ router.delete('/project', (req, res) => {
   Project.findOne({ projectId }).then((project) => {
     if (project) {
       Project.deleteOne({ projectId })
-        .then(() => res.status(200).send({ message: 'Project deleted successfuly' }))
+        .then(() => res.status(200).json({ message: 'Project deleted successfuly' }))
         .catch(() => res.status(400).json({ error: true, message: 'Unable to delete project' }));
     } else {
       return res.status(400).json({ error: true, message: 'Project with this id does not exist.' });

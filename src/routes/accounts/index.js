@@ -50,11 +50,11 @@ router.post('/login', (req, res) => {
 
     if (!passwordIsValid) return res.status(401).send({ token: null, message: 'Invalid Credentials' });
 
-    const token = jwt.sign({ id: account.id }, secret, {
+    const token = jwt.sign({ accountId: account.accountId }, secret, {
       expiresIn: 86400, // expires in 24 hours
     });
 
-    return res.status(200).send({ message: 'Account found', token, id: account.id });
+    return res.status(200).send({ message: 'Account found', token, accountId: account.accountId });
   });
 });
 
