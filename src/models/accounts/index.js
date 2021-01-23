@@ -1,23 +1,15 @@
 const mongoose = require('mongoose');
 
 const AccountSchema = new mongoose.Schema({
-  accountId: {
-    type: String,
-  },
-  firstName: {
-    type: String,
-  },
-  lastName: {
-    type: String,
-  },
-  email: {
-    type: String,
-  },
-  password: {
-    type: String,
-  },
-  repeatPassword: {
-    type: String,
+  accountId: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  repeatPassword: '',
+  lastActiveProject: {
+    projectId: '',
+    name: '',
   },
 });
 
