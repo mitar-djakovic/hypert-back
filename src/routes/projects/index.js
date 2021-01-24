@@ -53,23 +53,22 @@ router.delete('/project', async (req, res) => {
 
 // Set Last Active Project
 router.patch('/set-last-project', async (req, res) => {
-  const { adminId, projectId } = req.body;
+  const { accountId, projectId } = req.body;
 
   const project = await Project.findOne({ projectId });
+  const account = await Account.findOne({ accountId });
 
-  console.log('project', project);
-  const account = await Account.findOne({ accountId: adminId });
-  console.log('account', account);
-  const newAccout = await Account.updateOne(account, { lastActive: project });
-  console.log('newAccount', newAccout);
-
-  if (account.accountId === project.adminId) {
-    Account.findOneAndUpdate({ accountId: adminId }, { lastProject: project });
-
-    account.lastActive = project;
+  if (account.accountId === project.accountId) {
+    account.lastActiveProject = project;
     account.save();
 
-    return res.status(201).json({ message: 'Last project added' });
+    return res.status(201).json({
+      message: 'Last project added',
+      lastActiveProject: {
+        name: project.name,
+        projectId: project.projectId,
+      },
+    });
   }
   return res.status(404).json({ message: 'Something is not right' });
 });

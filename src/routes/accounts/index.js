@@ -52,7 +52,7 @@ router.post('/login', async (req, res) => {
       message: 'Account found',
       token,
       accountId: account.accountId,
-      lastActive: account.lastActive,
+      lastActiveProject: account.lastActiveProject,
     });
   }
 });
