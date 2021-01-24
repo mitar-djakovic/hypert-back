@@ -20,8 +20,13 @@ router.post('/project', async (req, res) => {
     return res.status(400).json({ error: true, message: 'Project with this name allready exist.' });
   }
 
-  Project.create(projectData).then(() => res.status(201).send({
+  Project.create(projectData).then((response) => res.status(201).send({
     message: 'Project created succesfuly',
+    project: {
+      accountId: response.accountId,
+      projectId: response.projectId,
+      name: response.name,
+    },
   })).catch(() => res.status(400).json({ error: true, message: 'Unable to create project.' }));
 });
 
@@ -30,8 +35,14 @@ router.post('/projects', async (req, res) => {
   const { accountId } = req.body;
 
   const projects = await Project.find({ accountId });
+  const filteredProjects = projects.map((project) => ({
+    accountId: project.accountId,
+    projectId: project.projectId,
+    name: project.name,
+  }));
+
   if (projects) {
-    return res.status(201).json({ message: 'Projects found.', projects });
+    return res.status(201).json({ message: 'Projects found.', projects: filteredProjects });
   }
   return res.status(404).json({ error: true, message: 'No projects are found.' });
 });
