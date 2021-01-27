@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const accounts = require('./routes/accounts');
 const projects = require('./routes/projects');
+const projectLists = require('./routes/projectLists');
 const connectDB = require('../config/db');
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(bodyParser.json());
 
 app.use('/api/accounts', accounts);
 app.use('/api/projects', projects);
+app.use('/api/project-lists', projectLists);
 
 app.get('/', (req, res) => res.send('Hello world!'));
 
