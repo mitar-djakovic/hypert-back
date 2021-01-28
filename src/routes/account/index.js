@@ -7,7 +7,7 @@ const config = require('config');
 const router = express.Router();
 const secret = config.get('secret');
 
-const Account = require('../../models/accounts');
+const Account = require('../../models/account/accountSchema');
 
 router.post('/signup', async (req, res) => {
   const {
@@ -22,11 +22,11 @@ router.post('/signup', async (req, res) => {
 
   const account = await Account.findOne({ email });
   if (account) {
-    return res.status(400).json({ error: true, message: 'Account with this email allready exist.' });
+    return res.status(400).json({ message: 'Account with this email allready exist.' });
   }
 
   if (password !== repeatPassword) {
-    return res.status(400).json({ error: true, message: 'Passwords do not match.' });
+    return res.status(400).json({ message: 'Passwords do not match.' });
   }
   Account.create(accountData).then(() => res.status(201).send({
     message: 'Account created successfully.',
@@ -38,18 +38,20 @@ router.post('/login', async (req, res) => {
 
   const account = await Account.findOne({ email });
   if (!account) {
-    return res.status(404).json({ error: true, message: 'Account not found' });
+    return res.status(404).json({ message: 'Account not found' });
   }
   if (account) {
     const passwordIsValid = bcrypt.compareSync(password, account.password);
 
-    if (!passwordIsValid) return res.status(401).send({ token: null, message: 'Invalid Credentials' });
+    if (!passwordIsValid) {
+      return res.status(401).send({ token: null, message: 'Invalid Credentials' });
+    }
     const token = jwt.sign({ accountId: account.accountId }, secret, {
       expiresIn: 86400, // expires in 24 hours
     });
 
     return res.status(200).json({
-      message: 'Account found',
+      message: 'Loged in successfully',
       token,
       accountId: account.accountId,
       lastActiveProject: account.lastActiveProject,

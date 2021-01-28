@@ -1,8 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const accounts = require('./routes/accounts');
-const projects = require('./routes/projects');
+const account = require('./routes/account');
+const project = require('./routes/project');
 const projectLists = require('./routes/projectLists');
 const connectDB = require('../config/db');
 
@@ -19,8 +19,8 @@ app.use(express.json({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use('/api/accounts', accounts);
-app.use('/api/projects', projects);
+app.use('/api/auth', account);
+app.use('/api/dashboard', project);
 app.use('/api/project-lists', projectLists);
 
 app.get('/', (req, res) => res.send('Hello world!'));
