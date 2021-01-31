@@ -5,7 +5,6 @@ const ListSchema = new mongoose.Schema({
   listId: '',
   accountId: '',
   projectId: '',
-  tasks: [],
 });
 
 module.exports = mongoose.model('list', ListSchema);

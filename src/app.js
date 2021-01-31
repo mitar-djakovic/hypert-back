@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const account = require('./routes/account');
 const project = require('./routes/project');
 const list = require('./routes/list');
+const task = require('./routes/task');
 const connectDB = require('../config/db');
 
 const app = express();
@@ -22,6 +23,7 @@ app.use(bodyParser.json());
 app.use('/api/auth', account);
 app.use('/api/dashboard', project);
 app.use('/api/dashboard', list);
+app.use('/api/dashboard', task);
 
 app.get('/', (req, res) => res.send('Hello world!'));
 

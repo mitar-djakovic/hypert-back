@@ -3,9 +3,11 @@ const uuid = require('uuid');
 
 const router = express.Router();
 
+const { response } = require('express');
 const Project = require('../../models/project/projectSchema');
 const Account = require('../../models/account/accountSchema');
 const List = require('../../models/list/listSchema');
+const Task = require('../../models/task/taskSchema');
 
 // Create Project List
 router.post('/list', async (req, res) => {
@@ -49,23 +51,17 @@ router.post('/lists', async (req, res) => {
   const account = await Account.findOne({ accountId });
   const lists = await List.find({ projectId });
 
-  const modifiedLists = lists.map((list) => ({
+  const newLists = lists.map((list) => ({
     name: list.name,
     listId: list.listId,
-    tasks: list.tasks,
   }));
 
   if (account) {
-    return res.status(201).json({ lists: modifiedLists });
+    return res.status(201).json({ lists: newLists });
   }
   if (!account) {
     return res.status(404).json({ message: 'Account does not exist.' });
   }
 });
-
-// Delete Project List
-// router.delete('/project-list', async (req, res) => {
-//   console.log('req', req.body);
-// });
 
 module.exports = router;
