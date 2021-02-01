@@ -40,7 +40,6 @@ router.post('/login', async (req, res) => {
 
   const account = await Account.findOne({ email });
 
-  console.log('account', account);
   if (!account) {
     return res.status(404).json({ message: 'Email or password is incorrect,' });
   }
