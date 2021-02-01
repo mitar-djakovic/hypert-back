@@ -14,12 +14,6 @@ router.post('/signup', async (req, res) => {
     email, password, repeatPassword,
   } = req.body;
 
-  const accountData = {
-    ...req.body,
-    password: bcrypt.hashSync(password, 10),
-    accountId: uuid.v4(),
-  };
-
   const account = await Account.findOne({ email });
   if (account) {
     return res.status(400).json({ message: 'Account with this email allready exist.' });
@@ -28,17 +22,27 @@ router.post('/signup', async (req, res) => {
   if (password !== repeatPassword) {
     return res.status(400).json({ message: 'Passwords do not match.' });
   }
-  Account.create(accountData).then(() => res.status(201).send({
-    message: 'Account created successfully.',
-  })).catch(() => res.status(400).json({ error: 'Unable to create this account.' }));
+
+  const accountData = {
+    ...req.body,
+    accountId: uuid.v4(),
+    password: bcrypt.hashSync(password, 10),
+  };
+
+  const newAccount = await Account.create(accountData);
+  if (newAccount) {
+    return res.status(201).json({ message: 'Account created successfully.' });
+  }
 });
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   const account = await Account.findOne({ email });
+
+  console.log('account', account);
   if (!account) {
-    return res.status(404).json({ message: 'Account not found' });
+    return res.status(404).json({ message: 'Email or password is incorrect,' });
   }
   if (account) {
     const passwordIsValid = bcrypt.compareSync(password, account.password);
@@ -58,5 +62,9 @@ router.post('/login', async (req, res) => {
     });
   }
 });
+
+// Treba mi ruta za extend tokena
+// Interceptor na axios i provera tokena
+// Mongose pogledati kako da fetchujem samo odredje stvari
 
 module.exports = router;

@@ -6,7 +6,6 @@ const AccountSchema = new mongoose.Schema({
   lastName: '',
   email: '',
   password: '',
-  repeatPassword: '',
   lastActiveProject: {
     projectId: '',
     name: '',
