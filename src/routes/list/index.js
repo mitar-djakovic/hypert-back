@@ -41,4 +41,22 @@ router.post('/list', async (req, res) => {
   }
 });
 
+router.post('/delete-list', async (req, res) => {
+  const { projectId, listId } = req.body;
+  const project = await Project.findOne({ projectId });
+
+  console.log('project', project);
+  if (!project) {
+    return res.status(404).json({ message: 'Project does not exist.' });
+  }
+
+  if (project) {
+    const updatedList = project.lists.filter((list) => list.listId !== listId);
+
+    project.lists = updatedList;
+    project.save();
+    return res.status(200).json({ message: 'List deleted', lists: updatedList });
+  }
+});
+
 module.exports = router;
